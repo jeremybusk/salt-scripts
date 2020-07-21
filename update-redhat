@@ -1,8 +1,9 @@
 #!/usr/bin/bash
 set -e
 rhel_ver=7
+salt_ver=latest  # 3000
 sudo yum remove -y salt-py3-repo || true
 sudo yum remove -y salt-py3-repo-latest || true
-curl -LO https://repo.saltstack.com/py3/redhat/salt-py3-repo-latest.el${rhel_ver}.noarch.rpm
-sudo yum install -y ./salt-py3-repo-latest.el${rhel_ver}.noarch.rpm
+curl -LO https://repo.saltstack.com/py3/redhat/salt-py3-repo-${salt-ver}.el${rhel_ver}.noarch.rpm
+sudo yum install -y ./salt-py3-repo-${salt-ver}.el${rhel_ver}.noarch.rpm
 sudo yum update
