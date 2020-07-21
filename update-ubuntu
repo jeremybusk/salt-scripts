@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+match="G@oscodename:Bionic and wjp1-f5backup.f5backup.app.prod or wjv-dnsmasq-pxe-proxy-prod1.dnsmasq_pxe_proxy.app.prod"
+sudo salt -C "${match}" test.version
+sudo salt -b 30 -C "${match}" cmd.run 'sed -i "s/2018.3\|2017.7/2019.2/g" /etc/apt/sources.list.d/saltstack.list'
+sudo salt -b 30 -C "${match}" cmd.run 'apt-get update; apt-get --yes -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" install salt-minion'
+# sudo apt-get -f install  # This is needed sometimes on error then reapply above. States on some machines aren't the greatest.
+# sudo salt -C "${match}" pkg.install salt-minion refresh=True  # This is the "salt" way but have issues with accepting prompts so just used apt/yum
