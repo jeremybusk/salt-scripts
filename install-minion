@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+# Installs host agents and registers with appropriate service server
+set -ex  # Use -ex for debugging
+. /etc/os-release
+
+if [ "$#" -ne 1 ]; then
+    echo "Usage: $0 <minion_id> <new_install:true/false>"
+fi
+
+minion_id_prefix="$1"
+new_install=$2
+
+minion_prep() {
+  echo "Setting up minion to connect to master."
+  sudo test -f /etc/salt/minion.orig || sudo cp /etc/salt/minion /etc/salt/minion.orig
+  curl -s  https://gitrepo/master_sign.pub \
+  | sudo tee /etc/salt/pki/minion/master_sign.pub
+  curl -s https://gitrep/minion.conf \
+  | sudo tee /etc/salt/minion.d/minion.conf
+  echo "${minion_id}" | sudo tee /etc/salt/minion_id > /dev/null
+}
+
+
+redhat_based_install_salt() {
+  VERSION_ID=$(echo ${VERSION_ID} | awk -F. '{print $1}')  # Used for Redhat < 8
+  rhel_repo_add_eh
+  sudo yum remove -y salt-minion || true
+  sudo yum install -y sudo
+  sudo yum install -y "https://repo.saltstack.com/py3/redhat/salt-py3-repo-latest.el${VERSION_ID}.noarch.rpm"
+  sudo yum install -y "https://repo.saltstack.com/py3/redhat/salt-py3-repo-${minion_version}.el${VERSION_ID}.noarch.rpm"
+  sudo yum install -y salt-minion
+  if [[ "${new_install}"=="true" ]]; then
+    minion_prep
+  fi
+  
+  sudo systemctl start salt-minion
+  sudo systemctl enable salt-minion
+}
