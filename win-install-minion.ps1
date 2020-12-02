@@ -65,7 +65,7 @@ function check_service() {
 
 function install_salt() {
   write-host "install salt"
-  $cmd = "${salt_file} /S /master=salt.extendhealth.com /minion-name=jebusk-testerama"
+  $cmd = "${salt_file} /S /master=salt.example.com /minion-name=jebusk-testerama"
   invoke-expression $cmd
 
   check_service
