@@ -49,6 +49,7 @@ function salt_uninstall() {
   }catch{}
 }
 
+
 function check_service() {
   $i = 1
   While($i -ne 40){
