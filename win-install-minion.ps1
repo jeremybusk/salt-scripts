@@ -40,6 +40,11 @@ function cleanup() {
 }
 
 
+function prep_host() {
+  choco install curl
+}
+
+
 function salt_uninstall() {
   try{
     stop-service salt-minion
