@@ -41,6 +41,7 @@ function cleanup() {
 
 
 function prep_host() {
+  Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
   choco install curl
 }
 
@@ -104,6 +105,7 @@ function main() {
   $nssm_file_hash = "F689EE9AF94B00E9E3F0BB072B34CAAF207F32DCB4F5782FC9CA351DF9A06C97"
   $nssm_file = "c:\salt\nssm.exe"
   $salt_file_hash = "58FAF92AD1E76D973C225C5E333D9945017930BB9D63FC5C7F3C3180B1DFD3D1"
+  prep_host
   salt_uninstall
   get_file $salt_file_url $salt_file $salt_file_hash
   install_salt
